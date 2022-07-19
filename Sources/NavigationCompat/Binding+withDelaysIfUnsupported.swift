@@ -19,9 +19,9 @@ public extension Binding where Value: Collection {
   }
 }
 
-public extension Binding where Value == NBNavigationPath {
+public extension Binding where Value == NavigationPathCompat {
   @_disfavoredOverload
-  func withDelaysIfUnsupported(_ transform: (inout NBNavigationPath) -> Void, onCompletion: (() -> Void)? = nil) {
+  func withDelaysIfUnsupported(_ transform: (inout NavigationPathCompat) -> Void, onCompletion: (() -> Void)? = nil) {
     let start = wrappedValue
     let end = apply(transform, to: start)
     Task { @MainActor in
@@ -45,7 +45,7 @@ extension Binding {
   }
 
   func withDelaysIfUnsupported<Screen>(from start: [Screen], to end: [Screen], keyPath: WritableKeyPath<Value, [Screen]>) async {
-    let steps = NavigationBackport.calculateSteps(from: start, to: end)
+    let steps = NavigationCompat.calculateSteps(from: start, to: end)
 
     wrappedValue[keyPath: keyPath] = steps.first!
     await scheduleRemainingSteps(steps: Array(steps.dropFirst()), keyPath: keyPath)

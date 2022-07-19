@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 @available(iOS, deprecated: 16.0, message: "Use SwiftUI's Navigation API beyond iOS 15")
-public struct NBNavigationLink<P: Hashable, Label: View>: View {
+public struct NavigationLinkCompat<P: Hashable, Label: View>: View {
   var value: P?
   var label: Label
 
@@ -26,7 +26,7 @@ public struct NBNavigationLink<P: Hashable, Label: View>: View {
   }
 }
 
-public extension NBNavigationLink where Label == Text {
+public extension NavigationLinkCompat where Label == Text {
   init(_ titleKey: LocalizedStringKey, value: P?) {
     self.init(value: value) { Text(titleKey) }
   }

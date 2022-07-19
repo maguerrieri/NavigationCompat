@@ -10,7 +10,7 @@ class PathHolder<Data>: ObservableObject {
 }
 
 @available(iOS, deprecated: 16.0, message: "Use SwiftUI's Navigation API beyond iOS 15")
-public struct NBNavigationStack<Root: View, Data: Hashable>: View {
+public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
   @Binding var path: [Data]
   @ObservedObject var pathHolder: PathHolder<Data>
 
@@ -51,7 +51,7 @@ public struct NBNavigationStack<Root: View, Data: Hashable>: View {
   }
 }
 
-public extension NBNavigationStack where Data == AnyHashable {
+public extension NavigationStackCompat where Data == AnyHashable {
   init(@ViewBuilder root: () -> Root) {
     let pathHolder = PathHolder<Data>()
     let path = Binding(
@@ -62,8 +62,8 @@ public extension NBNavigationStack where Data == AnyHashable {
   }
 }
 
-public extension NBNavigationStack where Data == AnyHashable {
-  init(path: Binding<NBNavigationPath>, @ViewBuilder root: () -> Root) {
+public extension NavigationStackCompat where Data == AnyHashable {
+  init(path: Binding<NavigationPathCompat>, @ViewBuilder root: () -> Root) {
     let path = Binding(
       get: { path.wrappedValue.elements },
       set: { path.wrappedValue.elements = $0 }

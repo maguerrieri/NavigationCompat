@@ -3,7 +3,7 @@ import SwiftUI
 
 typealias DestinationBuilder<T> = (T) -> AnyView
 
-enum NavigationBackport {
+enum NavigationCompat {
   public static func calculateSteps<Screen>(from start: [Screen], to end: [Screen]) -> [[Screen]] {
     let replacableScreens = end.prefix(start.count)
     let remainingScreens = start.count < end.count ? end.suffix(from: start.count) : []

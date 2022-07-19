@@ -3,25 +3,25 @@
 import PackageDescription
 
 let package = Package(
-  name: "NavigationBackport",
+  name: "NavigationCompat",
   platforms: [
     .iOS(.v13), .watchOS(.v7), .macOS(.v11), .tvOS(.v13),
   ],
   products: [
     .library(
-      name: "NavigationBackport",
-      targets: ["NavigationBackport"]
+      name: "NavigationCompat",
+      targets: ["NavigationCompat"]
     ),
   ],
   dependencies: [],
   targets: [
     .target(
-      name: "NavigationBackport",
+      name: "NavigationCompat",
       dependencies: []
     ),
     .testTarget(
-      name: "NavigationBackportTests",
-      dependencies: ["NavigationBackport"]
+      name: "NavigationCompatTests",
+      dependencies: ["NavigationCompat"]
     ),
   ]
 )

@@ -2,35 +2,35 @@
 
 This package uses the navigation APIs available in older SwiftUI versions (such as `NavigationView` and `NavigationLink`) to recreate the new `NavigationStack` APIs introduced in WWDC22, so that you can start targeting those APIs on older versions of iOS, tvOS and watchOS. 
  
-✅ `NavigationStack` -> `NBNavigationStack`
+✅ `NavigationStack` -> `NavigationStackCompat`
 
-✅ `NavigationLink` -> `NBNavigationLink`
+✅ `NavigationLink` -> `NavigationLinkCompat`
 
-✅ `NavigationPath` -> `NBNavigationPath`
+✅ `NavigationPath` -> `NavigationPathCompat`
 
-✅ `navigationDestination` -> `nbNavigationDestination`
+✅ `navigationDestination` -> `NavigationDestinationCompat`
 
-You can migrate to these APIs now, and when you eventually bump your deployment target to iOS 16, you can remove this library and easily migrate to its SwiftUI equivalent. You can initialise `NBNavigationStack` with a binding to an `Array`, a `NBNavigationPath` binding, or neither.
+You can migrate to these APIs now, and when you eventually bump your deployment target to iOS 16, you can remove this library and easily migrate to its SwiftUI equivalent. You can initialise `NavigationStackCompat` with a binding to an `Array`, a `NavigationPathCompat` binding, or neither.
 
 ## Example
 
 ```swift
-import NavigationBackport
+import NavigationCompat
 import SwiftUI
 
 struct ContentView: View {
-  @State var path = NBNavigationPath()
+  @State var path = NavigationPathCompat()
 
   var body: some View {
-    NBNavigationStack(path: $path) {
+    NavigationStackCompat(path: $path) {
       HomeView()
-        .nbNavigationDestination(for: NumberList.self, destination: { numberList in
+        .NavigationDestinationCompat(for: NumberList.self, destination: { numberList in
           NumberListView(numberList: numberList)
         })
-        .nbNavigationDestination(for: Int.self, destination: { number in
+        .NavigationDestinationCompat(for: Int.self, destination: { number in
           NumberView(number: number, goBackToRoot: { path.removeLast(path.count) })
         })
-        .nbNavigationDestination(for: EmojiVisualisation.self, destination: { visualisation in
+        .NavigationDestinationCompat(for: EmojiVisualisation.self, destination: { visualisation in
           EmojiView(visualisation: visualisation)
         })
     }
@@ -40,7 +40,7 @@ struct ContentView: View {
 struct HomeView: View {
   var body: some View {
     VStack(spacing: 8) {
-      NBNavigationLink(value: NumberList(range: 0 ..< 100), label: { Text("Pick a number") })
+      NavigationLinkCompat(value: NumberList(range: 0 ..< 100), label: { Text("Pick a number") })
     }.navigationTitle("Home")
   }
 }
@@ -54,7 +54,7 @@ struct NumberListView: View {
   var body: some View {
     List {
       ForEach(numberList.range, id: \.self) { number in
-        NBNavigationLink("\(number)", value: number)
+        NavigationLinkCompat("\(number)", value: number)
       }
     }.navigationTitle("List")
   }
@@ -67,11 +67,11 @@ struct NumberView: View {
   var body: some View {
     VStack(spacing: 8) {
       Text("\(number)")
-      NBNavigationLink(
+      NavigationLinkCompat(
         value: number + 1,
         label: { Text("Show next number") }
       )
-      NBNavigationLink(
+      NavigationLinkCompat(
         value: EmojiVisualisation(emoji: "🐑", count: number),
         label: { Text("Visualise with sheep") }
       )
@@ -98,7 +98,7 @@ struct EmojiView: View {
  
  ## Deep-linking
  
- Before `NavigationStack`, SwiftUI did not support pushing more than one screen in a single state update, e.g. when deep-linking to a screen multiple layers deep in a navigation hierarchy. `NavigationBackport` provides an API to work around this limitation: you can wrap such path changes within a call to `withDelaysIfUnsupported`, and the library will, if necessary, break down the larger update into a series of smaller updates that SwiftUI supports, with delays in between. For example, the following code that tries to push three screens in one update will not work:
+ Before `NavigationStack`, SwiftUI did not support pushing more than one screen in a single state update, e.g. when deep-linking to a screen multiple layers deep in a navigation hierarchy. `NavigationCompat` provides an API to work around this limitation: you can wrap such path changes within a call to `withDelaysIfUnsupported`, and the library will, if necessary, break down the larger update into a series of smaller updates that SwiftUI supports, with delays in between. For example, the following code that tries to push three screens in one update will not work:
 
 ```swift
   path.append(Screen.orders)

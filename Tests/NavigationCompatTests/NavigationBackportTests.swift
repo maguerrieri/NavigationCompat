@@ -1,12 +1,12 @@
-@testable import NavigationBackport
+@testable import NavigationCompat
 import XCTest
 
-final class NavigationBackportTests: XCTestCase {
+final class NavigationCompatTests: XCTestCase {
   func testPushOneAtATime() {
     let start = [1]
     let end = [-1, -2, -3, -4]
 
-    let steps = NavigationBackport.calculateSteps(from: start, to: end)
+    let steps = NavigationCompat.calculateSteps(from: start, to: end)
 
     let expectedSteps = [
       [-1],
@@ -21,7 +21,7 @@ final class NavigationBackportTests: XCTestCase {
     let start = [1, 2, 3, 4]
     let end = [-1]
 
-    let steps = NavigationBackport.calculateSteps(from: start, to: end)
+    let steps = NavigationCompat.calculateSteps(from: start, to: end)
 
     let expectedSteps = [end]
     XCTAssertEqual(steps, expectedSteps)
