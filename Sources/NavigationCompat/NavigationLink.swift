@@ -1,7 +1,9 @@
 import Foundation
 import SwiftUI
 
-@available(iOS, deprecated: 16.0, message: "Use SwiftUI's Navigation API beyond iOS 15")
+@available(iOS, deprecated: 16, message: "Use SwiftUI's Navigation API beyond iOS 15")
+@available(macOS, deprecated: 13, message: "Use SwiftUI's Navigation API beyond macOS 12")
+@available(tvOS, deprecated: 16, message: "Use SwiftUI's Navigation API beyond tvOS 15")
 public struct NavigationLinkCompat<P: Hashable, Label: View>: View {
   var value: P?
   var label: Label

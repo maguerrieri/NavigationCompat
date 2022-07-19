@@ -9,7 +9,9 @@ class PathHolder<Data>: ObservableObject {
   }
 }
 
-@available(iOS, deprecated: 16.0, message: "Use SwiftUI's Navigation API beyond iOS 15")
+@available(iOS, deprecated: 16, message: "Use SwiftUI's Navigation API beyond iOS 15")
+@available(macOS, deprecated: 13, message: "Use SwiftUI's Navigation API beyond macOS 12")
+@available(tvOS, deprecated: 16, message: "Use SwiftUI's Navigation API beyond tvOS 15")
 public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
   @Binding var path: [Data]
   @ObservedObject var pathHolder: PathHolder<Data>
