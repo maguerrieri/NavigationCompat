@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-public struct Router<Screen, RootView: View>: View {
+struct Router<Screen, RootView: View>: View {
     let rootView: RootView
     
     @Binding var screens: [Screen]
@@ -30,7 +30,7 @@ public struct Router<Screen, RootView: View>: View {
         )
     }
     
-    public var body: some View {
+    var body: some View {
         rootView
             .background(
                 NavigationLink(destination: pushedScreens, isActive: isActiveBinding, label: EmptyView.init)

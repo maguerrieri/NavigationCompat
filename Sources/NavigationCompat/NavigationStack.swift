@@ -35,11 +35,37 @@ public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
     @StateObject var destinationBuilder = DestinationBuilderHolder()
     
     public var body: some View {
+#if os(macOS)
+        Group {
+            if self.path.isEmpty {
+                self.root
+            } else if let data = self.path.last {
+                self.destinationBuilder.build(data)
+                    .transition(.move(edge: .trailing))
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        self.path.removeLast()
+                    }
+                } label: {
+                    Label("back", systemImage: "chevron.left")
+                }
+                .disabled(self.path.isEmpty)
+            }
+        }
+        .environmentObject(NavigationPathHolder(self.erasedPath))
+        .environmentObject(self.destinationBuilder)
+#else
         NavigationView {
-            Router(rootView: root, screens: $path)
-                .environmentObject(NavigationPathHolder(erasedPath))
-                .environmentObject(destinationBuilder)
-        }.navigationViewStyle(supportedNavigationViewStyle)
+            Router(rootView: self.root, screens: self.$path)
+                .environmentObject(NavigationPathHolder(self.erasedPath))
+                .environmentObject(self.destinationBuilder)
+        }
+        .navigationViewStyle(.stack)
+#endif
     }
     
     init(path: Binding<[Data]>, pathHolder: PathHolder<Data>, @ViewBuilder root: () -> Root) {
@@ -72,12 +98,4 @@ public extension NavigationStackCompat where Data == AnyHashable {
         )
         self.init(path: path, root: root)
     }
-}
-
-private var supportedNavigationViewStyle: some NavigationViewStyle {
-#if os(macOS)
-    .automatic
-#else
-    .stack
-#endif
 }
