@@ -36,7 +36,7 @@ public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
     
     public var body: some View {
 #if os(macOS)
-        Group {
+        VStack {
             if self.path.isEmpty {
                 self.root
             } else if let data = self.path.last {
