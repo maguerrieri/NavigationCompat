@@ -5,7 +5,10 @@ import PackageDescription
 let package = Package(
     name: "NavigationCompat",
     platforms: [
-        .iOS(.v13), .watchOS(.v7), .macOS(.v11), .tvOS(.v13),
+        .iOS(.v13),
+        .watchOS(.v7),
+        .macOS(.v11),
+        .tvOS(.v13),
     ],
     products: [
         .library(
