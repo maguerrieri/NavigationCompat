@@ -3,7 +3,8 @@ import SwiftUI
 
 public extension Binding where Value: Collection {
     @_disfavoredOverload
-    func withDelaysIfUnsupported<Screen>(_ transform: (inout [Screen]) -> Void, onCompletion: (() -> Void)? = nil) where Value == [Screen] {
+    func withDelaysIfUnsupported<Screen>(_ transform: (inout [Screen]) -> Void,
+                                         onCompletion: (() -> Void)? = nil) where Value == [Screen] {
         let start = wrappedValue
         let end = apply(transform, to: start)
         Task { @MainActor in
@@ -38,13 +39,15 @@ public extension Binding where Value == NavigationPathCompat {
 }
 
 extension Binding {
-    func withDelaysIfUnsupported<Screen>(_ transform: (inout [Screen]) -> Void, keyPath: WritableKeyPath<Value, [Screen]>) async {
+    func withDelaysIfUnsupported<Screen>(_ transform: (inout [Screen]) -> Void,
+                                         keyPath: WritableKeyPath<Value, [Screen]>) async {
         let start = wrappedValue[keyPath: keyPath]
         let end = apply(transform, to: start)
         await withDelaysIfUnsupported(from: start, to: end, keyPath: keyPath)
     }
     
-    func withDelaysIfUnsupported<Screen>(from start: [Screen], to end: [Screen], keyPath: WritableKeyPath<Value, [Screen]>) async {
+    func withDelaysIfUnsupported<Screen>(from start: [Screen], to end: [Screen],
+                                         keyPath: WritableKeyPath<Value, [Screen]>) async {
         let steps = NavigationCompat.calculateSteps(from: start, to: end)
         
         wrappedValue[keyPath: keyPath] = steps.first!
