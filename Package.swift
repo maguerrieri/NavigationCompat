@@ -16,11 +16,15 @@ let package = Package(
             targets: ["NavigationCompat"]
         ),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "git@github.com:shaps80/SwiftUIBackports.git", exact: "1.6.2"),
+    ],
     targets: [
         .target(
             name: "NavigationCompat",
-            dependencies: []
+            dependencies: [
+                "SwiftUIBackports",
+            ]
         ),
         .testTarget(
             name: "NavigationCompatTests",

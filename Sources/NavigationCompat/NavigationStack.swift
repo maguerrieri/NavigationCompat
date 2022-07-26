@@ -1,6 +1,8 @@
 import Foundation
 import SwiftUI
 
+import SwiftUIBackports
+
 class PathHolder<Data>: ObservableObject {
     @Published var path: [Data]
     
@@ -14,10 +16,10 @@ class PathHolder<Data>: ObservableObject {
 @available(tvOS, deprecated: 16, message: "Use SwiftUI's Navigation API beyond tvOS 15")
 public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
     @Binding var path: [Data]
-    @ObservedObject var pathHolder: PathHolder<Data>
-    
+    @Backport.StateObject var pathHolder: PathHolder<Data>
+
     var root: Root
-    
+
     var erasedPath: Binding<[AnyHashable]> {
         Binding(
             get: { path.map(AnyHashable.init) },
@@ -31,8 +33,8 @@ public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
             }
         )
     }
-    
-    @StateObject var destinationBuilder = DestinationBuilderHolder()
+
+    @Backport.StateObject var destinationBuilder = DestinationBuilderHolder()
     
     public var body: some View {
 #if os(macOS)
@@ -69,11 +71,12 @@ public struct NavigationStackCompat<Root: View, Data: Hashable>: View {
     }
     
     init(path: Binding<[Data]>, pathHolder: PathHolder<Data>, @ViewBuilder root: () -> Root) {
-        _path = path
+        self._path = path
+        self._pathHolder = .init(wrappedValue: pathHolder)
+
         self.root = root()
-        self.pathHolder = pathHolder
     }
-    
+
     public init(path: Binding<[Data]>, @ViewBuilder root: () -> Root) {
         self.init(path: path, pathHolder: .init(), root: root)
     }
